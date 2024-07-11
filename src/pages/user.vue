@@ -24,14 +24,28 @@
         :location="$vuetify.display.mobile ? 'bottom' : undefined"
         temporary
       >
-        <v-list nav>
+        <v-list nav
+          v-if="getUser.user_type_id == 3"
+        >
           <v-list-item
             v-for="(item, itemIndex) in items"
             :key="itemIndex"
             :title="item.title"
             :value="item.value"
             :prepend-icon="item.icon"
-            @click="$router.push(item.url)"
+            @click="!item.url ? logout() : $router.push(item.url)"
+          ></v-list-item>
+        </v-list>
+        <v-list nav
+          v-if="getUser.user_type_id == 2"
+        >
+          <v-list-item
+            v-for="(item, itemIndex) in items_writer"
+            :key="itemIndex"
+            :title="item.title"
+            :value="item.value"
+            :prepend-icon="item.icon"
+            @click="!item.url ? logout() : $router.push(item.url)"
           ></v-list-item>
         </v-list>
       </v-navigation-drawer>
@@ -268,13 +282,29 @@ export default {
     add_user: false,
     drawer: false,
     group: null,
+    items_writer: [
+      {
+        title: 'Dashboard',
+        value: 'dashboard',
+        icon: 'mdi-view-dashboard',
+        url: {
+          path: '/dashboard'
+        }
+      },
+      {
+        title: 'Logout',
+        value: 'logout',
+        icon: 'mdi-logout',
+        url: false
+      }
+    ],
     items: [
       {
         title: 'Dashboard',
         value: 'dashboard',
         icon: 'mdi-view-dashboard',
         url: {
-          path: '/editor'
+          path: '/dashboard'
         }
       },
       {
@@ -282,7 +312,7 @@ export default {
         value: 'users',
         icon: 'mdi-account-group',
         url: {
-          path: '/editor_user'
+          path: '/user'
         }
       },
       {
@@ -290,9 +320,15 @@ export default {
         value: 'companies',
         icon: 'mdi-domain',
         url: {
-          path: '/editor_company'
+          path: '/company'
         }
       },
+      {
+        title: 'Logout',
+        value: 'logout',
+        icon: 'mdi-logout',
+        url: false
+      }
     ],
     headers: [
       { title: 'Name', align: 'start', key: 'name' },
@@ -405,6 +441,12 @@ export default {
       this.delete_user = {}
       this.delete_user_bool = false
       await this.getUsersAction()
+    },
+    logout(){
+      localStorage.clear();
+      setTimeout(() => {
+        this.$router.push({path: '/'})
+      }, 2000);
     }
   },
   watch: {

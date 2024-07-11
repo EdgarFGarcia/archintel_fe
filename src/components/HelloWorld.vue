@@ -74,10 +74,11 @@
             break;
           case 2:
             // writer
+            this.$router.push({path: 'dashboard'})
             break;
           case 3:
             // editor
-            this.$router.push({path: 'editor'})
+            this.$router.push({path: 'dashboard'})
             break;
         }
       }
