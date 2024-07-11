@@ -66,6 +66,7 @@
                 variant="flat"
                 color="blue"
                 @click="add_article = true"
+                v-if="getUser.user_type_id == 2"
               >
                 <v-icon
                   class="mr-3"
